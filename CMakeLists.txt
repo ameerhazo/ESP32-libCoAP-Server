@@ -9,4 +9,4 @@ set(EXTRA_COMPONENT_DIRS $ENV{IDF_PATH}/examples/common_components/protocol_exam
 							
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
-project(coap_server)
+project(esp32-libCoAP-Server)

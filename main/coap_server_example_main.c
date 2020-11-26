@@ -40,6 +40,7 @@
 
 //add Ressources
 #include "DHT11_Resource.h"
+#include "BME280_Resource.h"
 
 
 
@@ -211,6 +212,7 @@ static void coap_example_server(void *p)
         /* End of Espressif */
         /* DHT11 Resource */
         init_DHT11_resource(ctx);
+        init_BME280_resource(ctx);
         /* End of DHT11 Resource */
 
         wait_ms = COAP_RESOURCE_CHECK_TIME * 1000;
@@ -230,11 +232,11 @@ static void coap_example_server(void *p)
             else
             {
             //TODO observe every second if the resource change?
-    	    DHT11_Notify_Handler();
-
+    	    
             }
 
-
+            DHT11_Notify_Handler();
+            BME280_Notify_Handler();
 
             if (result)
             {
@@ -261,7 +263,10 @@ void app_main(void)
      * examples/protocols/README.md for more information about this function. 
      */
     ESP_ERROR_CHECK(example_connect());
+    ESP_ERROR_CHECK(i2cdev_init());
 
-    xTaskCreate(coap_example_server, "coap", 8 * 1024, NULL, 5, NULL);
-    xTaskCreate(DHT11_Run, "Sensors", 8 * 1024, NULL, 5, NULL);
+    xTaskCreate(coap_example_server, "coap", 8 * 1024, NULL, 8, NULL);
+    xTaskCreate(DHT11_Run, "DHT11", 8 * 1024, NULL, 6, NULL);
+    xTaskCreate(BME280_Run, "BME280", 8 * 1024, NULL, 6, NULL);
+
 }
